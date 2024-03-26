@@ -23,7 +23,7 @@ describe('Factory.prototype.attr', function () {
     })
 
     it('has a builder for the field', function () {
-      expect(factory._attrs[field]).to.have.property('builder').that.is.a('function');
+      expect(factory._attrs[field]).to.have.property('builder').that.is.a('function')
     })
 
     it('returns the value', function () {
@@ -55,7 +55,7 @@ describe('Factory.prototype.attr', function () {
   })
 
   context('with dependencies', function () {
-    let fieldOne, valueOne, fieldTwo, valueTow
+    let fieldOne, valueOne, fieldTwo, valueTwo
 
     beforeEach(function () {
       fieldOne = faker.lorem.word()

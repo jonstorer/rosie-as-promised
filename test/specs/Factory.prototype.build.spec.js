@@ -44,7 +44,7 @@ describe('Factory.prototype.build', function () {
       beforeEach(function () {
         factory = new Factory()
           .attr(key, value)
-          .beforeBuild((object, options) => {
+          .beforeBuild((object) => {
             object.beforeBuild = true
           })
       })
@@ -58,7 +58,7 @@ describe('Factory.prototype.build', function () {
       beforeEach(function () {
         factory = new Factory()
           .attr(key, value)
-          .afterBuild((object, options) => {
+          .afterBuild((object) => {
             object.beforeBuild = true
             return { something: 'else' }
           })
@@ -104,7 +104,7 @@ describe('Factory.prototype.build', function () {
     context('that do not return a value', function () {
       beforeEach(function () {
         factory = new Factory()
-          .afterBuild((object, options) => {
+          .afterBuild((object) => {
             object.afterBuild = true
           })
       })
@@ -117,7 +117,7 @@ describe('Factory.prototype.build', function () {
     context('that do return a value', function () {
       beforeEach(function () {
         factory = new Factory()
-          .afterBuild((object, options) => {
+          .afterBuild((object) => {
             object.afterBuild = true
             return { something: 'else' }
           })

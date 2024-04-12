@@ -2,7 +2,7 @@ const { Factory } = require('../../')
 const { expect } = require('chai')
 const sinon = require('sinon')
 
-describe.only('Factory.prototype.extend', function () {
+describe('Factory.prototype.extend', function () {
   let parentFactoryOne, parentFactoryTwo, childFactory
 
   beforeEach(function () {

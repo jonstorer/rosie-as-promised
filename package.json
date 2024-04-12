@@ -1,6 +1,6 @@
 {
   "name": "rosie-as-promised",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "factory for building JavaScript objects with async support, mostly useful for setting up test data. Inspired by rosiejs",
   "keywords": [
     "factory",

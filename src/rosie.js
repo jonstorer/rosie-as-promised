@@ -449,12 +449,12 @@ class Factory {
     Object.assign(this.opts, factory.opts)
 
     // Copy the parent's hooks
-    this.beforeBuildHooks = factory.beforeBuildHooks.slice()
-    this.afterBuildHooks = factory.afterBuildHooks.slice()
+    this.beforeBuildHooks = this.beforeBuildHooks.concat(factory.beforeBuildHooks)
+    this.afterBuildHooks = this.afterBuildHooks.concat(factory.afterBuildHooks)
 
-    this.beforeCreateHooks = factory.beforeCreateHooks.slice()
+    this.beforeCreateHooks = this.beforeCreateHooks.concat(factory.beforeCreateHooks)
     this.createHandler = this.createHandler || factory.createHandler // needs test for not overritting
-    this.afterCreateHooks = factory.afterCreateHooks.slice()
+    this.afterCreateHooks = this.afterCreateHooks.concat(factory.afterCreateHooks)
 
     return this
   }

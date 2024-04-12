@@ -3,61 +3,71 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 
 describe('Factory.prototype.extend', function () {
-  let factoryOne, factoryTwo
-  let constructor
-  let beforeBuild, afterBuild
-  let beforeCreate, onCreate, afterCreate
+  let parentFactoryOne, parentFactoryTwo, childFactory
 
   beforeEach(function () {
-    constructor = sinon.spy()
-    beforeBuild = sinon.spy()
-    afterBuild = sinon.spy()
-    beforeCreate = sinon.spy()
-    onCreate = sinon.spy()
-    afterCreate = sinon.spy()
-
-    factoryOne = new Factory(constructor)
+    parentFactoryOne = new Factory(sinon.spy())
       .sequence('id')
       .attr('key', 'key1')
       .option('opt', 'opt1')
-      .beforeBuild(beforeBuild)
-      .afterBuild(afterBuild)
-      .beforeCreate(beforeCreate)
-      .afterCreate(afterCreate)
-      .onCreate(onCreate)
+      .beforeBuild(sinon.spy())
+      .afterBuild(sinon.spy())
+      .beforeCreate(sinon.spy())
+      .afterCreate(sinon.spy())
+      .onCreate(sinon.spy())
 
-    factoryTwo = new Factory().extend(factoryOne)
+    parentFactoryTwo = new Factory()
+      .sequence('order')
+      .attr('key', 'key2')
+      .attr('prop', 'value')
+      .option('arg', 'arg1')
+      .beforeBuild(sinon.spy())
+      .afterBuild(sinon.spy())
+      .beforeCreate(sinon.spy())
+      .afterCreate(sinon.spy())
+      .onCreate(sinon.spy())
+
+    childFactory = new Factory()
+      .extend(parentFactoryOne)
+      .extend(parentFactoryTwo)
   })
 
-  it('copies the constructor', function () {
-    expect(factoryTwo.construct).to.eql(constructor)
+  it('copies the constructor from parent One', function () {
+    expect(childFactory.construct).to.eql(parentFactoryOne.construct)
   })
 
-  it('copies the attribute definitions', function () {
-    expect(factoryTwo._attrs).to.eql(factoryOne._attrs)
+  it('copies the attribute definitions from both parents', function () {
+    expect(childFactory._attrs.id).to.eql(parentFactoryOne._attrs.id)
+    expect(childFactory._attrs.key).to.eql(parentFactoryTwo._attrs.key)
+    expect(childFactory._attrs.prop).to.eql(parentFactoryTwo._attrs.prop)
   })
 
   it('copies the option definitions', function () {
-    expect(factoryTwo.opts).to.eql(factoryOne.opts)
+    expect(childFactory.opts.opt).to.eql(parentFactoryOne.opts.opt)
+    expect(childFactory.opts.arg).to.eql(parentFactoryTwo.opts.arg)
   })
 
-  it('copies the beforeBuild hooks', function () {
-    expect(factoryTwo.beforeBuildHooks).to.eql(factoryOne.beforeBuildHooks)
+  it('copies the beforeBuild hooks from both parents', function () {
+    expect(childFactory.beforeBuildHooks).to.include(...parentFactoryOne.beforeBuildHooks)
+    expect(childFactory.beforeBuildHooks).to.include(...parentFactoryTwo.beforeBuildHooks)
   })
 
-  it('copies the afterBuild hooks', function () {
-    expect(factoryTwo.afterBuildHooks).to.eql(factoryOne.afterBuildHooks)
+  it('copies the afterBuild hooks from both parents', function () {
+    expect(childFactory.afterBuildHooks).to.include(...parentFactoryOne.afterBuildHooks)
+    expect(childFactory.afterBuildHooks).to.include(...parentFactoryTwo.afterBuildHooks)
   })
 
-  it('copies the beforeCreate hooks', function () {
-    expect(factoryTwo.beforeCreateHooks).to.eql(factoryOne.beforeCreateHooks)
+  it('copies the beforeCreate hooks from both parents', function () {
+    expect(childFactory.beforeCreateHooks).to.include(...parentFactoryOne.beforeCreateHooks)
+    expect(childFactory.beforeCreateHooks).to.include(...parentFactoryTwo.beforeCreateHooks)
   })
 
   it('copies the onCreate hook', function () {
-    expect(factoryTwo.createHandler).to.eql(factoryOne.createHandler)
+    expect(childFactory.createHandler).to.eql(parentFactoryOne.createHandler)
   })
 
   it('copies the afterCreate hooks', function () {
-    expect(factoryTwo.afterCreateHooks).to.eql(factoryOne.afterCreateHooks)
+    expect(childFactory.afterCreateHooks).to.include(...parentFactoryOne.afterCreateHooks)
+    expect(childFactory.afterCreateHooks).to.include(...parentFactoryTwo.afterCreateHooks)
   })
 })

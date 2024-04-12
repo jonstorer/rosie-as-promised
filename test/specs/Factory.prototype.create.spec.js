@@ -26,11 +26,11 @@ describe('Factory.prototype.create', function () {
     let hookOne, hookTwo, builtObjectClone, result
 
     beforeEach(async function () {
-      hookOne = sinon.spy((object, options) => {
+      hookOne = sinon.spy((object) => {
         object.callOne = true
         return { object }
       })
-      hookTwo = sinon.spy(async (object, options) => {
+      hookTwo = sinon.spy(async () => {
         new Promise(res => setImmediate(res))
         return { callTwo: true }
       })
@@ -60,21 +60,21 @@ describe('Factory.prototype.create', function () {
 
   context('onCreate hook', function () {
     it('calls the onCreate Hook',  async function () {
-      const onCreate = sinon.spy((object, options) => { })
+      const onCreate = sinon.spy(() => { })
       factory.onCreate(onCreate)
       await factory.create(attributes, options)
       expect(onCreate).to.have.been.calledWith(builtObject, options)
     })
 
     it('modifies the object without returning it', async function () {
-      const onCreate = sinon.spy((object, options) => { object.created = true })
+      const onCreate = sinon.spy((object) => { object.created = true })
       factory.onCreate(onCreate)
       const result = await factory.create(attributes, options)
       expect(result).to.eql({ ...builtObject, created: true })
     })
 
     it('overrides the object by returning something', async function () {
-      const onCreate = sinon.spy((object, options) => { return { created: true } })
+      const onCreate = sinon.spy(() => { return { created: true } })
       factory.onCreate(onCreate)
       const result = await factory.create(attributes, options)
       expect(result).to.eql({ created: true })
@@ -85,11 +85,11 @@ describe('Factory.prototype.create', function () {
     let hookOne, hookTwo, builtObjectClone, result
 
     beforeEach(async function () {
-      hookOne = sinon.spy((object, options) => {
+      hookOne = sinon.spy((object) => {
         object.callOne = true
         return { object }
       })
-      hookTwo = sinon.spy(async (object, options) => {
+      hookTwo = sinon.spy(async () => {
         new Promise(res => setImmediate(res))
         return { callTwo: true }
       })

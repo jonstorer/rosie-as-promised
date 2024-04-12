@@ -1,4 +1,4 @@
-const { Factory } = require('../');
+const { Factory } = require('../')
 const chai = require('chai')
 
 chai.use(require('chai-as-promised'))
@@ -8,7 +8,7 @@ const sinon = require('sinon')
 
 exports.mochaHooks = {
   afterEach () {
-    Factory.implode();
+    Factory.implode()
 
     sinon.restore()
   }

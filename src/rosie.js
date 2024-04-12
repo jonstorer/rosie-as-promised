@@ -18,7 +18,7 @@ class Factory {
     this.createHandler = null
     this.afterCreateHooks = []
 
-    Factory._allFactories.push(this);
+    Factory._allFactories.push(this)
   }
 
   /**
@@ -464,7 +464,7 @@ class Factory {
    * Preserves attributes and options as-is.
    */
   reset() {
-    this.sequences = {};
+    this.sequences = {}
   }
 }
 
@@ -502,11 +502,11 @@ Factory.util = (function () {
   }
 })()
 
-Factory.factories = {};
+Factory.factories = {}
 Object.defineProperty(Factory, '_allFactories', {
   value: [],
-  enumerable: false,
-});
+  enumerable: false
+})
 
 /**
  * Retrieve a factory from the registrar
@@ -602,23 +602,23 @@ Factory.attributes = function (name, attributes, options) {
  * @param {string} name
  */
 Factory.reset = function (name) {
-  this.get(name).reset();
-};
+  this.get(name).reset()
+}
 
 /**
  * Resets all factory build state. Preserves attributes and options as-is.
  */
 Factory.resetAll = function () {
-  Factory._allFactories.forEach((factory) => factory.reset());
-};
+  Factory._allFactories.forEach((factory) => factory.reset())
+}
 
 /**
  * Unregister and forget all existing factories.
  */
 Factory.implode = function () {
-  Factory.factories = {};
-  Factory._allFactories.length = 0;
-};
+  Factory.factories = {}
+  Factory._allFactories.length = 0
+}
 
 /* istanbul ignore next */
 if (typeof exports === 'object' && typeof module !== 'undefined') {

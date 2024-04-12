@@ -6,8 +6,7 @@
 
 Rosie-As-Promised is based on [RosieJS](https://github.com/rosiejs/rosie) and is comptabile with the RosieJS API.  Rosie is inspired by [factory_girl](https://github.com/thoughtbot/factory_girl).
 
-
-Rosie-As-Promised is a factory for building JavaScript objects, mostly useful for setting up test data. Rosie-As-Promised provides pre and post lifecycle hooks for the build and create steps. These lifecycle hooks can be asynchronous. However, Rosie-As-Promised will remain synchronous until an asynchronous hooks is encountered. Meaning, Rosie-As-Promised maintains compatability with the RosieJS interface by staying synchronous until and asynchronous step is met. All lifecycle hooks can be defined as synchronous or asynchronous. Rosie-As-Promised will only return a promise if one of the lifecycle hooks returns a promise.
+Rosie-As-Promised is a fixtures replacement used to define objects (mostly for test data) that provides synchronous-until-they-are-not lifecycle hooks.
 
 To use Rosie-As-Promised you first define a _factory_. The _factory_ is defined in terms of _attributes_, _sequences_, _options_, and _hooks_. A factory can inherit from other factories. Once the factory is defined you use it to build _objects_.
 
@@ -23,6 +22,53 @@ To use Rosie-As-Promised you first define a _factory_. The _factory_ is defined 
   - [Extending Factories](#extending-factories)
 
 - [Using a factory](#using-a-facttry)
+
+
+#### All Options Example
+
+```javascript
+const { faker } = require('@faker-js/faker')
+const { Post, Comment, User, Like } = require('@models')
+
+Factory
+  .define('Base')
+  .sequence('id')
+  .onCreate(async (object) => {
+    return await persistToDatastore(object)
+  })
+  .afterCreate(async (object) => {
+    return await hydrateDataFromDatastore(object)
+  })
+
+Factory
+  .define('Post', Post)
+  .extend('Base')
+  .attr('body', () => faker.lorem.paragraphs())
+  .attr('author', () => Factory.build('User'))
+  .option('commentCount', () => Math.floor(Math.random() * 5))
+  .attr('comments', ['commentCount', 'id'], (count, postId) => Factory.buildList('Comment', count, { postId }))
+  .option('likeCount', () => Math.floor(Math.random() * 15))
+  .attr('likes', ['likeCount', 'id'], (count, postId) => Factory.buildList('List', count, { postId }))
+
+Factory
+  .define('Comment', Comment)
+  .extend('Base')
+  .attr('body', () => faker.lorem.paragraphs())
+  .attr('author', () => Factory.build('User'))
+  .attr('post', () => Factory.build('Post'))
+
+Factory
+  .define('Like', Like)
+  .extend('Base')
+  .attr('liker', () => Factory.build('User'))
+
+Factory
+  .define('User', User)
+  .extend('Base')
+  .attr('firstName', () => faker.person.firstName())
+  .attr('lastName', () => faker.person.lastName())
+  .attr('email', ['firstName', 'lastName'], (firstName, lastName) => faker.internet.exampleEmail({ firstName, lastName }))
+```
 
 ### Factory
 

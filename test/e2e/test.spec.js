@@ -1,7 +1,6 @@
 const { Factory } = require('../../')
 const { expect } = require('chai')
 const { faker } = require('@faker-js/faker')
-const sinon = require('sinon')
 
 describe('not sure yet', function () {
   const tick = () => new Promise((res) => setImmediate(res))
@@ -39,7 +38,7 @@ describe('not sure yet', function () {
       .attr('comments', ['postsCount'], (count) => Factory.buildList('Comment', count))
       .sequence('authorId')
       .attr('author', ['authorId'], (id) => Factory.build('User', { id }))
-      .beforeBuild((attributes, options) => {
+      .beforeBuild((attributes) => {
         if (attributes.author) attributes.authorId = attributes.author.id
       })
 
@@ -56,7 +55,7 @@ describe('not sure yet', function () {
       .attr('content', () => faker.lorem.paragraphs())
       .sequence('authorId')
       .attr('author', ['authorId'], (id) => Factory.build('User', { id }))
-      .beforeBuild((attributes, options) => {
+      .beforeBuild((attributes) => {
         if (attributes.author) attributes.authorId = attributes.author.id
       })
 

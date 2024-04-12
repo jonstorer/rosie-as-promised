@@ -3,7 +3,7 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 
 describe('Factory.build', function () {
-  let factory
+  let factory, result
 
   beforeEach(function () {
     factory = new Factory()

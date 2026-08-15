@@ -402,6 +402,7 @@ class Factory {
    * @return {*}
    */
   create (attributes, options) {
+    options = this.options(options)
     const maybePromise = this.build(attributes, options)
 
     return Factory.util.after(maybePromise, (object) => {

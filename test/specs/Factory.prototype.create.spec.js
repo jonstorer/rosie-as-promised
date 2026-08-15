@@ -145,6 +145,27 @@ describe('Factory.prototype.create', function () {
     })
   })
 
+  context('declared option defaults', function () {
+    it('resolves them before invoking beforeCreate, onCreate, and afterCreate hooks', async function () {
+      const beforeCreate = sinon.spy(() => { })
+      const onCreate = sinon.spy(() => { })
+      const afterCreate = sinon.spy(() => { })
+
+      const realFactory = new Factory()
+        .attr('name', 'Jon')
+        .option('role', 'default-role')
+        .beforeCreate(beforeCreate)
+        .onCreate(onCreate)
+        .afterCreate(afterCreate)
+
+      await realFactory.create()
+
+      expect(beforeCreate).to.have.been.calledWith(sinon.match.any, { role: 'default-role' })
+      expect(onCreate).to.have.been.calledWith(sinon.match.any, { role: 'default-role' })
+      expect(afterCreate).to.have.been.calledWith(sinon.match.any, { role: 'default-role' })
+    })
+  })
+
   describe('sync and async create hooks', function () {
     beforeEach(function () {
       factory = new Factory().attr('firstName', 'Jon')
